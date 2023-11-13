@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" [autocomplete]="'off'">
+    <ion-input label="Código del Alumno" label-placement="floating" fill="outline" placeholder="Ingresa tu código"
+      (ionInput)="onInput($event)" ngDefaultControl formControlName="code"></ion-input>
+    <br>
+    <ion-input type="password" label="Contraseña" label-placement="floating" fill="outline"
+      placeholder="Ingresa tu contraseña" ngDefaultControl formControlName="password"></ion-input>
+    <br>
+    <ion-button expand="block" type="submit" [disabled]="!loginForm.valid">Ingresar</ion-button>
+    <ion-toast [isOpen]="presenter.isToastOpen" [message]="presenter.messageToast" [duration]="3000"
+      (didDismiss)="presenter.setOpenToast(false)"></ion-toast>
+    <ion-loading [isOpen]="presenter.isLoadingOpen" [message]="'Cargando'"></ion-loading>
+  </form>
+</ion-content>
