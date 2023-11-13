@@ -1,2 +1,0 @@
-# ChapaTuProfe
-Proyecto de Universidad
