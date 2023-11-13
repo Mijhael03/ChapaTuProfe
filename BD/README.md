@@ -1,17 +1,17 @@
-#README
+# README
 
 
 ## Credenciales Login
 
-Usuario admin
+Usuario admin  
 
-user: admin
+user: admin  
 Password: 123456
 
 
-Usuario estudiante
+Usuario estudiante  
 
-user: U20150713
+user: U20150713  
 Password: 12345
 
 
