@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { CourseComponent } from './course/course.component';
@@ -15,7 +15,10 @@ export const routes: Routes = [
 ]
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    CourseComponent,
+
+  ],
   imports: [
     RouterModule.forChild(routes),
     CommonModule,
@@ -23,6 +26,7 @@ export const routes: Routes = [
     ReactiveFormsModule,
     SharedModule,
     InjectorModule
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class MaintenanceModule { }
