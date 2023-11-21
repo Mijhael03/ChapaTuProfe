@@ -20,7 +20,81 @@
 </head>
 
 <body>
-  <app-root></app-root>
+  <!--<app-root></app-root>-->
+  <ion-content>
+    <ion-header [translucent]="true">
+      <ion-title class="saludo-header">¡Hola, Carlos!</ion-title>
+      <ion-icon class="exit-icon"></ion-icon>
+      <ion-icon name="exit-outline" class="exit-icon"></ion-icon>
+    </ion-header>
+
+
+    <div class="buscar-container">
+      <ion-searchbar placeholder="Buscar Curso"></ion-searchbar>
+    </div>
+  
+  
+    <ion-item>
+      <p class="estado-curso">Estado curso</p>
+      <ion-select class="escoger-container" slot="end" aria-label="Estado" interface="popover" placeholder="Escoger">
+        <ion-select-option value="En curso" >En curso</ion-select-option>
+        <ion-select-option value="Conluido">Concluido</ion-select-option>
+        <ion-select-option value="Pendiente">Pendiente</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+
+
+  <ion-list [inset]="true">
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title" >Integrador II</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Criptografía</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Desarrollo Móvil</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title" >Programación Orientada a Objetos</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Programación de Videojuegos con C++</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Desarrollo de Software II</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Criptografía II</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Desarrollo de Software I</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Matemática para ingenieros II</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+        <ion-item role="article" class="green-list-item">
+          <ion-label class="curso-title">Calidad de Software</ion-label>
+          <ion-icon name="arrow-forward-outline" class="arrow-icon"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+
+  
+
+
+
+  
 </body>
 
 </html>
