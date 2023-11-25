@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Service.Common.Util\Service.Common.Util.csproj" />
     <ProjectReference Include="..\Qualifying.Persistence.Database\Qualifying.Persistence.Database.csproj" />
 	<ProjectReference Include="..\Qualifying.Service.EventHandlers\Qualifying.Service.EventHandlers.csproj" />
     <ProjectReference Include="..\Qualifying.Service.Queries\Qualifying.Service.Queries.csproj" />

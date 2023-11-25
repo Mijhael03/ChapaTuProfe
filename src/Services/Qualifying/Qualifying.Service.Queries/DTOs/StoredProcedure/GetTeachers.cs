@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Qualifying.Domain
+namespace Qualifying.Service.Queries.DTOs.StoredProcedure
 {
-    public class Teacher
+    public class GetTeachersDto
     {
         public int TeacherId { get; set; }
         public string? Code { get; set; }

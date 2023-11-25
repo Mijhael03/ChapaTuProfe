@@ -4,6 +4,7 @@ using Authentication.Service.Queries.StoredProcedure;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Service.Common.Util;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,22 +16,16 @@ namespace Authentication.Api.Controllers
     [EnableCors("AllowOrigin")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly ILogger<AuthenticationController> _logger;
-        private readonly string? _routeRoot;
-        private readonly string? _defaultConnection;
         private readonly string? _keyData;
         private IConfiguration _configuration { get; }
         private readonly IGetUserQueryService _IGetUserQueryService;
+
         public AuthenticationController(
-          ILogger<AuthenticationController> logger,
           IConfiguration configuration,
           IGetUserQueryService IGetUserQueryService
           )
         {
-            _logger = logger;
             _configuration = configuration;
-            _defaultConnection = _configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
-            _routeRoot = _configuration.GetSection("ConfigDocument").GetSection("RouteRoot").Value;
             _keyData = _configuration.GetSection("ConfigDocument").GetSection("keyData").Value;
             _IGetUserQueryService = IGetUserQueryService;
         }
@@ -38,31 +33,15 @@ namespace Authentication.Api.Controllers
         [HttpPost]
         public async Task<GetUserDto?> Auth(RequestGetUser request)
         {
-            GetUserDto result = await _IGetUserQueryService.GetUser(request.code, request.password);
+            GetUserDto? result = await _IGetUserQueryService.GetUser(request.code, request.password);
 
             if (result != null)
             {
-                result.Photo = GetPhoto(result);
+                result.Photo = Funciones.GetFile(result.Photo);
                 result.Token = GetToken(request);
             }
 
             return result;
-        }
-
-        private string GetPhoto(GetUserDto result)
-        {
-            string photo = string.Empty;
-            string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-            string imagePath = projectDirectory + "\\DocumentApp\\" + result.Photo;
-
-            if (System.IO.File.Exists(imagePath))
-            {
-                Byte[] bytes = System.IO.File.ReadAllBytes(imagePath);
-                photo = result.Photo = Convert.ToBase64String(bytes);
-            }
-
-            return photo;
         }
 
         private string GetToken(RequestGetUser request)

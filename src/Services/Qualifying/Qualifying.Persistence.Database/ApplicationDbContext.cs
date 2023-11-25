@@ -14,10 +14,10 @@ namespace Qualifying.Persistence.Database
         {
         }
 
-        public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Qualify> Qualify { get; set; }
+        public DbSet<TeacherDetail> TeachersDetail { get; set; }
+        public DbSet<Questionnaire> Questionnaires { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,10 +28,11 @@ namespace Qualifying.Persistence.Database
 
         public void ModelConfig(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Student>().HasNoKey();
             modelBuilder.Entity<Course>().HasNoKey();
             modelBuilder.Entity<Teacher>().HasNoKey();
-            modelBuilder.Entity<Qualify>().HasNoKey();
+            modelBuilder.Entity<TeacherDetail>().HasNoKey();
+            modelBuilder.Entity<Questionnaire>().HasNoKey();
         }
     }
 }
+

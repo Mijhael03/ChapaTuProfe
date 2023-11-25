@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Qualifying.Service.EventHandlers.Commands;
 using Qualifying.Service.Queries.DTO.StoredProcedure;
+using Qualifying.Service.Queries.DTOs.StoredProcedure;
 using Qualifying.Service.Queries.StoredProcedure;
 using Service.Common.Collection;
+using Service.Common.Util;
 
 namespace Qualifying.Api.Controllers
 {
@@ -19,13 +21,18 @@ namespace Qualifying.Api.Controllers
         private readonly string? routeRoot;
         private readonly string? _defaultConnection;
         private IConfiguration _configuration { get; }
-        private readonly IGetCourseQueryService _IGetCourseQueryService;
-        //private Funciones funciones = new Funciones();
+        private readonly IGetCoursesQueryService _IGetCoursesQueryService;
+        private readonly IGetTeachersQueryService _IGetTeachersQueryService;
+        private readonly IGetTeacherDetailQueryService _IGetTeacherDetailQueryService;
+        private readonly IGetQuestionnaireQueryService _IGetQuestionnaireQueryService;
         public QualifyingController(
           ILogger<QualifyingController> logger,
           IMediator mediator,
           IConfiguration configuration,
-          IGetCourseQueryService IGetCourseQueryService
+          IGetCoursesQueryService IGetCourseQueryService,
+          IGetTeachersQueryService IGetTeachersQueryService,
+          IGetTeacherDetailQueryService IGetTeacherDetailQueryService,
+          IGetQuestionnaireQueryService IGetQuestionnaireQueryService
           )
         {
             _logger = logger;
@@ -33,21 +40,54 @@ namespace Qualifying.Api.Controllers
             _configuration = configuration;
             routeRoot = _configuration.GetSection("ConfigDocument").GetSection("RouteRoot").Value;
             _defaultConnection = _configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
-            _IGetCourseQueryService = IGetCourseQueryService;
+            _IGetCoursesQueryService = IGetCourseQueryService;
+            _IGetTeachersQueryService = IGetTeachersQueryService;
+            _IGetTeacherDetailQueryService = IGetTeacherDetailQueryService;
+            _IGetQuestionnaireQueryService = IGetQuestionnaireQueryService;
         }
 
         [HttpGet("courses")]
-        public async Task<List<GetCourseDto>> GetCourseParticipant(Int64 StudentId)
+        public async Task<List<GetCoursesDto>> GetCourses(int StudentId, int CareerId)
         {
-            return await _IGetCourseQueryService.GetCourse(StudentId);
+            return await _IGetCoursesQueryService.GetCourses(StudentId, CareerId);
+        }
+
+        [HttpGet("teachers")]
+        public async Task<List<GetTeachersDto>> GetTeachers(int CourseId)
+        {
+            var result = await _IGetTeachersQueryService.GetTeachers(CourseId);
+
+            if (result.Count() > 0)
+            {
+                result.ForEach(x => x.Photo = Funciones.GetFile(x.Photo));
+            }
+
+            return result;
+        }
+
+        [HttpGet("teacher/detail")]
+        public async Task<List<GetTeacherDetailDto>> GetTeacherDetail(int TeacherId, int courseId)
+        {
+            var result = await _IGetTeacherDetailQueryService.GetTeacherDetail(TeacherId, courseId);
+
+            if (result.Count() > 0)
+            {
+                result[0].TeacherPhoto = Funciones.GetFile(result[0].TeacherPhoto);
+            }
+
+            return result;
+        }
+
+        [HttpGet("questionnaire")]
+        public async Task<List<GetQuestionnaireDto>> GetQuestionnaire(int StudentId, int TeacherId, int CourseId, int CycleNumber)
+        {
+            return await _IGetQuestionnaireQueryService.GetQuestionnaire(StudentId, TeacherId, CourseId, CycleNumber);
         }
 
         [HttpPost("qualify")]
-        public async Task<DataResponse> GetCourseParticipant(QualifyCreateCommand comand)
+        public async Task<DataResponse> Qualify(QualifyCreateCommand comand)
         {
             return await _mediator.Send(comand);
         }
-        
-
     }
 }

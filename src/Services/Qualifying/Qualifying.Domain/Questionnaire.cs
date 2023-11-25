@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Qualifying.Domain
 {
-    public class Course
+    public class Questionnaire
     {
-        public int CourseId { get; set; }
-        public string? Code { get; set; }
+        public int QuestionNumber { get; set; }
+        public int SequenceQuestion { get; set; }
         public string? Description { get; set; }
-        public string? Status { get; set; }
     }
 }

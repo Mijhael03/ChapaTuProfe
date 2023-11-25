@@ -38,9 +38,13 @@ namespace Qualifying.Api
                 x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                 .MigrationsHistoryTable("__EFMigrationhistory", "ChapaTuProfe"))
             );
-            
+
             services.AddMediatR(Assembly.Load("Qualifying.Service.EventHandlers"));
-            services.AddTransient<IGetCourseQueryService, GetCourseQueryService>();
+            services.AddTransient<IGetCoursesQueryService, GetCoursesQueryService>();
+            services.AddTransient<IGetTeachersQueryService, GetTeachersQueryService>();
+            services.AddTransient<IGetTeacherDetailQueryService, GetTeacherDetailQueryService>();
+            services.AddTransient<IGetQuestionnaireQueryService, GetQuestionnaireQueryService>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

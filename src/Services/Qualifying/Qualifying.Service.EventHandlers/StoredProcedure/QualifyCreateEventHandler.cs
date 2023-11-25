@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Qualifying.Service.EventHandlers.StoredProcedure
 {
@@ -29,30 +30,65 @@ namespace Qualifying.Service.EventHandlers.StoredProcedure
         {
             using var transaction = _context.Database.BeginTransaction();
             DataResponse resp = new();
-
+            resp.Code = DataResponse.STATUS_ERROR;
+            resp.Status = false;
+            resp.IDbdGenerado = -1;
             try
             {
                 _context.Database.OpenConnection();
-                SqlParameter pStudentId = new() { ParameterName = "@studentId", SqlDbType = SqlDbType.Int, Value = command.StudentId };
-                SqlParameter oCode = new() { ParameterName = "@code", SqlDbType = SqlDbType.Int, Value = command.StudentId, Direction = ParameterDirection.Output };
-                await _context.Database.ExecuteSqlRawAsync("EXEC [dbo].[uspAddQualify]  @studentId, @code OUTPUT", pStudentId, oCode);
+                SqlParameter pStudentId = new() { ParameterName = "@StudentId", SqlDbType = SqlDbType.Int, Value = command.StudentId };
+                SqlParameter pTeacherId = new() { ParameterName = "@TeacherId", SqlDbType = SqlDbType.Int, Value = command.TeacherId };
+                SqlParameter pCourseId = new() { ParameterName = "@CourseId", SqlDbType = SqlDbType.Int, Value = command.CourseId };
+                SqlParameter pCareerId = new() { ParameterName = "@CareerId", SqlDbType = SqlDbType.Int, Value = command.CareerId };
+                SqlParameter pCycleNumber = new() { ParameterName = "@CycleNumber", SqlDbType = SqlDbType.Int, Value = command.CycleNumber };
+                SqlParameter pQualificationTotal = new() { ParameterName = "@QualificationTotal", SqlDbType = SqlDbType.Int, Value = command.QualificationTotal };
+                SqlParameter pQuestionScoreAverage = new() { ParameterName = "@QuestionScoreAverage", SqlDbType = SqlDbType.Int, Value = command.QuestionScoreAverage };
+                SqlParameter pUser = new() { ParameterName = "@User", SqlDbType = SqlDbType.VarChar, Value = command.User };
+                SqlParameter oCode = new() { ParameterName = "@Code", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Output };
+                await _context.Database.ExecuteSqlRawAsync("EXEC [dbo].[uspAddQualify]  @studentId, @TeacherId, @CourseId, @CareerId, @CycleNumber, @QualificationTotal, @QuestionScoreAverage, @User, @Code OUTPUT",
+                                                                                        pStudentId, pTeacherId, pCourseId, pCareerId, pCycleNumber, pQualificationTotal, pQuestionScoreAverage, pUser, oCode);
 
-                int respId = string.IsNullOrWhiteSpace(oCode.Value.ToString()) ? 0 : int.Parse(oCode.Value.ToString());
+                int QualifyId = string.IsNullOrEmpty(oCode.Value.ToString()) ? 0 : int.Parse(oCode.Value.ToString());
 
-                if (respId > 0)
+                if (QualifyId <= 0)
+                {
+                    await transaction.RollbackAsync();
+                    return MessageError("Algo ocurrió, por favor vuelva ha intentarlo en unos segundos");
+                }
+
+                foreach (QualifyDetail item in command.Detail)
+                {
+                    SqlParameter pQualifyDetId = new() { ParameterName = "@QualifyId", SqlDbType = SqlDbType.Int, Value = QualifyId };
+                    SqlParameter pQuestionNumber = new() { ParameterName = "@QuestionNumber", SqlDbType = SqlDbType.Int, Value = item.QuestionNumber };
+                    SqlParameter pQuestionSequence = new() { ParameterName = "@QuestionSequence", SqlDbType = SqlDbType.Int, Value = item.QuestionSequence };
+                    SqlParameter pScore = new() { ParameterName = "@Score", SqlDbType = SqlDbType.Int, Value = item.Score };
+                    SqlParameter oCodeDetail = new() { ParameterName = "@Code", SqlDbType = SqlDbType.Int, Direction = ParameterDirection.Output };
+                    await _context.Database.ExecuteSqlRawAsync("EXEC [dbo].[uspAddQualifyDetail]  @QualifyId, @QuestionNumber, @QuestionSequence, @Score, @User, @Code OUTPUT",
+                                                                                               pQualifyDetId, pQuestionNumber, pQuestionSequence, pScore, pUser, oCodeDetail);
+
+                    int QualifyDetId = string.IsNullOrEmpty(oCodeDetail.Value.ToString()) ? 0 : int.Parse(oCodeDetail.Value.ToString());
+
+                    if (QualifyDetId <= 0)
+                    {
+                        await transaction.RollbackAsync();
+                        return MessageError("Por favor vuelva ha intentarlo en unos segundos");
+                    }
+                }
+
+                if (QualifyId > 0)
                 {
                     resp.Code = DataResponse.STATUS_CREADO;
+                    resp.Message = "Su calificación ha sido registrado correctamente";
                     resp.Status = true;
-                    resp.IDbdGenerado = respId;
+                    resp.IDbdGenerado = QualifyId;
                     await transaction.CommitAsync();
                 }
                 else
                 {
-                    resp.Code = DataResponse.STATUS_ERROR;
-                    resp.Status = false;
-                    resp.IDbdGenerado = -1;
                     await transaction.RollbackAsync();
+                    return MessageError("Vuelva ha intentarlo en unos segundos");
                 }
+
             }
             catch (Exception ex)
             {
@@ -60,6 +96,7 @@ namespace Qualifying.Service.EventHandlers.StoredProcedure
                 resp.Code = DataResponse.STATUS_EXCEPTION;
                 resp.Message = ex.Message;
                 resp.Status = false;
+                resp.IDbdGenerado = -1;
                 await transaction.RollbackAsync();
             }
             finally
@@ -67,6 +104,18 @@ namespace Qualifying.Service.EventHandlers.StoredProcedure
                 _context.Database.CloseConnection();
             }
 
+            return resp;
+        }
+
+        public static DataResponse MessageError(string message)
+        {
+            DataResponse resp = new()
+            {
+                Code = DataResponse.STATUS_ERROR,
+                Message = message,
+                Status = false,
+                IDbdGenerado = -1
+            };
             return resp;
         }
     }

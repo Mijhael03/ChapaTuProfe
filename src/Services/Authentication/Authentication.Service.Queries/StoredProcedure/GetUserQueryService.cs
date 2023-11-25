@@ -14,7 +14,7 @@ namespace Authentication.Service.Queries.StoredProcedure
 {
     public interface IGetUserQueryService
     {
-        Task<GetUserDto> GetUser(string? code, string? password);
+        Task<GetUserDto?> GetUser(string? code, string? password);
     }
     public class GetUserQueryService : IGetUserQueryService
     {
