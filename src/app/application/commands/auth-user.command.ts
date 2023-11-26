@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Failure } from "src/app/domain/error/failure";
 import { User } from "src/app/domain/models/user";
-import { UserRepository } from "src/app/domain/repositories/user.repository";
 import { BaseCommandHandler } from "./base.handler";
+import { UserRepository } from "src/app/domain/repositories/user.repository";
 
 @Injectable()
 export class AuthUserCommand {
@@ -21,17 +20,15 @@ export class AuthUserCommandHandler implements BaseCommandHandler<Promise<void>,
                 .subscribe({
                     next: (user: User) => {
                         if (user.isLoggedIn()) {
-                            console.log("User in command", user)
+                            console.log("User auth", user)
                             this.userRepository.saveUserSession(user);
                             resolve()
                         } else {
                             reject()
                         }
                     },
-                    error: (e) => reject("Código y/o contraseña incorrectos")
-                }
-                );
+                    error: () => reject("Código y/o contraseña incorrectos")
+                });
         });
     }
-
 }

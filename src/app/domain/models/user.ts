@@ -1,12 +1,12 @@
 export class User {
     userId!: number;
     careerId!: number;
+    cycleNumber!: number;
     rolId!: number;
     code!: string;
     name!: string;
     lastname!: string;
     email!: string;
-    photo!: string;
     token!: string;
     status!: string;
 

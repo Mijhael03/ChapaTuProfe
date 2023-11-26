@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { AuthUserCommand, AuthUserCommandHandler } from "src/app/application/commands/auth-user.command";
 import { UserRepository } from "src/app/domain/repositories/user.repository";
+import { AuthUserCommand, AuthUserCommandHandler } from "src/app/application/commands/auth-user.command";
 
 @Injectable()
 export class LoginPresenter {
 
-    isLoading: boolean = false;
     isToastOpen: boolean = false;
     isLoadingOpen: boolean = false;
+    isLoadingDismiss: boolean = false;
     messageToast: string = "";
 
     constructor(
@@ -17,16 +17,15 @@ export class LoginPresenter {
         private router: Router
     ) { }
 
-    async authUser(code: string, password: string) {
-        this.setOpenLoading(true);
-        this.isLoading = true;
+    authUser(code: string, password: string) {
+        this.isLoadingOpen = true;
         this.authUserCommand.code = code;
         this.authUserCommand.password = password;
-        await this.authUserCommandHandler.handle(this.authUserCommand).then((value) => {
+        this.authUserCommandHandler.handle(this.authUserCommand).then((value) => {
+            this.isLoadingOpen = false;
             this.auth.getUserSession().rolId === 1 ? this.router.navigate(["maintenance/courses"]) : this.router.navigate(["qualifying/course"]);
-            this.setOpenLoading(false);
         }).catch((error) => {
-            this.setOpenLoading(false);
+            this.isLoadingOpen = false;
             this.setOpenToast(true, error);
         });
     }
@@ -35,9 +34,4 @@ export class LoginPresenter {
         this.isToastOpen = isOpen;
         this.messageToast = message;
     }
-
-    setOpenLoading(isOpen: boolean) {
-        this.isLoadingOpen = isOpen;
-    }
-
 }

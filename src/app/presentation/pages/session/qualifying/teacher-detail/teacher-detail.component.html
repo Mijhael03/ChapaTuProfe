@@ -1,47 +1,78 @@
-<ion-header>
-  <ion-toolbar class="toolbar">
-    <img src="assets/icon/flecha-izq.svg" alt="">
-    <ion-title> Detalle Profesor </ion-title>
-    <img src="assets/icon/flecha-cerrar-sesion.svg" alt="">
+<ion-header [fullscreen]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start" (click)="evReturn()">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle Profesor</ion-title>
+    <ion-buttons (click)="evLogout()" slot="end">
+      <ion-icon name="log-out-outline" size="large"></ion-icon>
+      &nbsp;&nbsp;&nbsp;
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-content">
-  <div class="content-title">
-    <div class="course">
-      <p> Integrador II</p>
-    </div>
-    <div class="teacher course">
-      <p> C151651 - Juan Victor Lozano Salazar</p>
-    </div>
-  </div>
-  <div class="detail">
-  <img class="user" src="assets/images/foto_perfil_profesor-default.png" alt="">
-  <div class="detail-calification-content">
-    <h2>Calificación:</h2>
-    <div class="detail-calification">
-      <p>4.5</p>
-      <div class="detail-calification-stars">
-        <img src="assets/icon/estrella-rellenada.svg" alt="">
-        <p>
-          (35 calificaciones)
-        </p>
-      </div>
-      
-    </div>
-  </div>
-  </div>
-  <div class="questions">
-    <div class="each-question">
-      <div><p>Pregunta 1</p></div>
 
-      <div class="stars">
-        <img src="assets/icon/estrella-rellenada.svg" alt="">
-        <img src="assets/icon/estrella-rellenada.svg" alt="">
-        <img src="assets/icon/estrella-rellenada.svg" alt="">
-        <img src="assets/icon/estrella-rellenada.svg" alt="">
-        <img src="assets/icon/estrella-rellenada.svg" alt="">
-      </div>
-    </div>
-  </div>
-  <ion-button class="ion-button">Calificar Profesor</ion-button>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-list [inset]="true">
+    <ion-item color="warning">
+      <ion-label class="ion-text-wrap bold text-center" [innerHTML]="courseName"></ion-label>
+    </ion-item>
+    <br />
+    <ion-item color="warning">
+      <ion-label class="ion-text-wrap bold text-center" [innerHTML]="teacherCodeName"></ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1" size-md="4" size-lg="2"></ion-col>
+      <ion-col size="5" size-md="4" size-lg="2">
+        <ion-avatar aria-hidden="true" class="item-avatar center-img">
+          <img [src]="teacherPhoto" />
+        </ion-avatar>
+      </ion-col>
+      <ion-col size="5" size-md="4" size-lg="2">
+        <ion-item color="primary">
+          <ion-label class="ion-text-wrap text-center">
+            Calificación
+            <br />
+            <h1>
+              {{qualificationAverage}}
+              <img src="assets/icon/estrella-rellenada.svg" class="w-15" />
+            </h1>
+            <h6 [innerHTML]="messageQualification"></h6>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <app-chart *ngIf="visibleChart" [questionAverageList]="presenter.teacherDetailList"></app-chart>
+
+  <ion-grid *ngIf="visibleButton">
+    <ion-row>
+      <ion-col size="12" size-md="4" size-lg="2">
+        <ion-item *ngFor="let row of presenter.questionnaireList; let i=index" color="light">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="6" size-md="4" size-lg="2">
+                <ion-label class="ion-text-wrap" label="Floating label" labelPlacement="floating"
+                  [innerHTML]="row.description"></ion-label>
+              </ion-col>
+              <ion-col size="6" size-md="4" size-lg="2" class="ion-text-center">
+                <ion-range [min]="1" [max]="5" [pin]="true" [ticks]="true"
+                  [snaps]="true" aria-label="" (ionKnobMoveEnd)="onIonKnobMoveEnd($event,i)"></ion-range>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-item class="pl-25">
+            <ion-button expand="block" (click)="evQualify()">Calificar Profesor</ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-loading [isOpen]="presenter.isLoadingOpen" [message]="'Cargando'" [duration]="500"
+  (didDismiss)="true"></ion-loading>
+  <ion-toast [isOpen]="presenter.isToastOpen" [message]="presenter.messageToast" [duration]="4000"
+    (didDismiss)="presenter.setOpenToast(false)"></ion-toast>
 </ion-content>

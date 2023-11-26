@@ -1,4 +1,4 @@
 export class Failure {
-    code: string = '';
-    message: string = '';
+    code!: string;
+    message!: string;
 }

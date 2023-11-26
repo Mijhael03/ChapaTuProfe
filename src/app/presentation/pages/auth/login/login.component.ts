@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  async onSubmit() {
-    await this.presenter.authUser(
+  onSubmit() {
+    this.presenter.authUser(
       this.loginForm.get('code')?.value,
       this.loginForm.get('password')?.value);
   }

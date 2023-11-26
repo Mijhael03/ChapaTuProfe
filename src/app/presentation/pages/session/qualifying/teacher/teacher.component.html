@@ -1,3 +1,33 @@
-<p>
-  teacher works!
-</p>
+<ion-header [fullscreen]="true">
+  <ion-toolbar color="secondary">
+    <ion-buttons slot="start" (click)="evReturn()">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Profesores</ion-title>
+    <ion-buttons (click)="evLogout()" slot="end">
+      <ion-icon name="log-out-outline" size="large"></ion-icon>
+      &nbsp;&nbsp;&nbsp;
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-list [inset]="true">
+    <ion-item color="warning">
+      <ion-label class="ion-text-wrap bold text-center" [innerHTML]="courseName"></ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-searchbar [debounce]="200" (ionInput)="handleInput($event)" color="light"
+    placeholder="Ingrese nombre profesor"></ion-searchbar>
+  <ion-list [inset]="true">
+    <ion-item button *ngFor="let row of presenter.teacherFilter" (click)="evSelectRow(row)" color="success">
+      <ion-avatar aria-hidden="true" slot="start">
+        <img [src]="row.photo" />
+      </ion-avatar>
+      <ion-label class="ion-text-wrap" [innerHTML]="row.name"></ion-label>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </ion-item>
+  </ion-list>
+  <ion-toast [isOpen]="presenter.isToastOpen" [message]="presenter.messageToast" [duration]="3000"
+    (didDismiss)="presenter.setOpenToast(false)"></ion-toast>
+</ion-content>

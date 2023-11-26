@@ -6,7 +6,9 @@ import { environment } from "src/environments/environment";
     providedIn: 'root'
 })
 export class QualifyingService {
-    urlGetTest = `${environment.apiQualifying}/Maintenance/test`;
-    urlPutTest = `${environment.apiQualifying}/Maintenance/testPut`;
-    urlPostTest = `${environment.apiQualifying}/Maintenance/testPost`;
+    urlGetCourses = `${environment.apiQualifying}/qualifying/courses`;
+    urlGetTeachers = `${environment.apiQualifying}/qualifying/teachers`;
+    urlGetTeacherDetail = `${environment.apiQualifying}/qualifying/teacher/detail`;
+    urlGetQuestionnaire = `${environment.apiQualifying}/qualifying/questionnaire`;
+    urlPostQualify = `${environment.apiQualifying}/qualifying/qualify`;
 }

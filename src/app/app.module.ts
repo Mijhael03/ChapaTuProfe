@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { InjectorModule } from './injector.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +17,10 @@ import { InjectorModule } from './injector.module';
     HttpClientModule,
     InjectorModule,
     AppRoutingModule,
-    IonicModule.forRoot()
+    IonicModule.forRoot({
+      scrollPadding: false,
+      scrollAssist: true
+    })
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
