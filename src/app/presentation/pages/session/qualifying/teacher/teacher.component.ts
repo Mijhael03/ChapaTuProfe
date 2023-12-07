@@ -27,7 +27,7 @@ export class TeacherComponent implements OnInit {
     await this.presenter.getTeachers(this.courseId).then(() => {
       this.presenter.teacherFilter = [...this.presenter.teacherList];
       this.courseName = this.presenter.teacherList[0].courseName;
-      this.presenter.teacherFilter.map(x => x.photo = `data:image/png;base64,${x.photo}`);
+      this.presenter.teacherFilter.map(x => x.photo = `assets/images/${x.photo}`);
     });
   }
 

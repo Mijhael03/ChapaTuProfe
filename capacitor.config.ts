@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.chapatuprofe.app',
   appName: 'ChapaTuProfe',
   webDir: 'www',
   server: {

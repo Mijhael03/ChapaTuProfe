@@ -47,7 +47,7 @@ export class TeacherDetailComponent implements OnInit {
         this.qualificationQuantity === 1 ? `(${this.qualificationQuantity} calificación)` :
           `(${this.qualificationQuantity} calificaciones)`;
       this.visibleChart = this.qualificationQuantity > 0;
-      this.teacherPhoto = `data:image/png;base64,${this.presenter.teacherDetailList[0].teacherPhoto}`;
+      this.teacherPhoto = `assets/images/${this.presenter.teacherDetailList[0].teacherPhoto}`;
     });
     await this.presenter.getQuestionnaire(this.teacherId, this.courseId).then(() => {
       if (this.presenter.questionnaireList.length > 0) {

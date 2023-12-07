@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ChapaTuProfe</string>
+    <string name="title_activity_main">ChapaTuProfe</string>
+    <string name="package_name">com.chapatuprofe.app</string>
+    <string name="custom_url_scheme">com.chapatuprofe.app</string>
+</resources>
