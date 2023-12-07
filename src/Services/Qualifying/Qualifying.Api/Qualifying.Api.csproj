@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Qualifying.Service.Queries\Qualifying.Service.Queries.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
 </Project>

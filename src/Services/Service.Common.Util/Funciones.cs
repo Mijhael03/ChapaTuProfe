@@ -11,10 +11,8 @@ namespace Service.Common.Util
         public static string GetFile(string? FileName)
         {
             string photo = string.Empty;
-            string workingDirectory = Environment.CurrentDirectory;
-            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
-            string imagePath = projectDirectory + "\\DocumentApp\\" + FileName;
-
+            string imagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("bin\\Debug\\net6.0\\", ""), "Images\\" + FileName);
+         
             if (System.IO.File.Exists(imagePath))
             {
                 Byte[] bytes = System.IO.File.ReadAllBytes(imagePath);

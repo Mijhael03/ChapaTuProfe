@@ -53,7 +53,14 @@ namespace Qualifying.Service.EventHandlers.StoredProcedure
                 if (QualifyId <= 0)
                 {
                     await transaction.RollbackAsync();
-                    return MessageError("Algo ocurrió, por favor vuelva ha intentarlo en unos segundos");
+                    if (QualifyId == -3)
+                    {
+                        return MessageError("Usted ya cuenta con un registro de calificación");
+                    }
+                    else
+                    {
+                        return MessageError("Algo ocurrió, por favor vuelva ha intentarlo en unos segundos");
+                    }
                 }
 
                 foreach (QualifyDetail item in command.Detail)

@@ -37,7 +37,6 @@ namespace Authentication.Api.Controllers
 
             if (result != null)
             {
-                result.Photo = Funciones.GetFile(result.Photo);
                 result.Token = GetToken(request);
             }
 

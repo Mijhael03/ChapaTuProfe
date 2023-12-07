@@ -55,27 +55,13 @@ namespace Qualifying.Api.Controllers
         [HttpGet("teachers")]
         public async Task<List<GetTeachersDto>> GetTeachers(int CourseId)
         {
-            var result = await _IGetTeachersQueryService.GetTeachers(CourseId);
-
-            if (result.Count() > 0)
-            {
-                result.ForEach(x => x.Photo = Funciones.GetFile(x.Photo));
-            }
-
-            return result;
+            return await _IGetTeachersQueryService.GetTeachers(CourseId);
         }
 
         [HttpGet("teacher/detail")]
         public async Task<List<GetTeacherDetailDto>> GetTeacherDetail(int TeacherId, int courseId)
         {
-            var result = await _IGetTeacherDetailQueryService.GetTeacherDetail(TeacherId, courseId);
-
-            if (result.Count() > 0)
-            {
-                result[0].TeacherPhoto = Funciones.GetFile(result[0].TeacherPhoto);
-            }
-
-            return result;
+            return await _IGetTeacherDetailQueryService.GetTeacherDetail(TeacherId, courseId);
         }
 
         [HttpGet("questionnaire")]
